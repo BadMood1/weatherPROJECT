@@ -9,8 +9,8 @@ form.onsubmit = submitHandler;
 
 // Делаем дефолтный вызов для Мариуполя
 input.value = "Мариуполь";
-// submitHandler(new Event("submit"));
-// input.value = "";
+submitHandler(new Event("submit"));
+input.value = "";
 
 // Функции
 

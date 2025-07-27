@@ -25,11 +25,13 @@ body {
 
 /* При ширине экрана ≤ 768px блок растягивается на всю ширину */
 @media (max-width: 768px) {
+    body {
+        background-color: #240090;
+    }
     .app {
         width: 100%;
-        min-height: 100vh;
         border-radius: 0; /* Убираем скругления, если нужно */
-        /* padding: 15px; */
+        padding: 0 20px;
     }
 }
 
@@ -61,6 +63,13 @@ body {
     padding-bottom: 60px;
     text-align: center;
     color: #00b8d8;
+}
+
+/* Уменьшаем отступы и размеры на мобильных */
+@media (max-width: 768px) {
+    .weather__info {
+        padding-bottom: auto;
+    }
 }
 
 .weather__img {
@@ -120,23 +129,4 @@ body {
 .details__title {
     font-size: 14px; /* Размер шрифта для подписи */
     color: #00b8d8;
-}
-
-/* Уменьшаем отступы и размеры на мобильных */
-@media (max-width: 768px) {
-    .weather__info {
-        padding-bottom: 30px; /* Уменьшаем отступ */
-    }
-
-    .weather__img {
-        width: 96px; /* Уменьшаем иконку погоды */
-    }
-
-    .weather__temp {
-        font-size: 48px; /* Чуть меньше текст */
-    }
-
-    .weather__details {
-        width: 100%; /* Растягиваем блоки с humidity/wind */
-    }
 }
