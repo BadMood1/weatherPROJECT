@@ -7,6 +7,13 @@ const API_KEY = "9fd3b5f9f5e5bfa13d8f38b3acf0edd3";
 
 form.onsubmit = submitHandler;
 
+// Делаем дефолтный вызов для Мариуполя
+input.value = "Мариуполь";
+// submitHandler(new Event("submit"));
+// input.value = "";
+
+// Функции
+
 async function submitHandler(event) {
     event.preventDefault(); // Убираем обновление страницы
 
@@ -16,6 +23,8 @@ async function submitHandler(event) {
 
     const locationInfo = await getWeather(input.value.trim());
 
+    const time = renderCurrentTime(locationInfo);
+    console.log(time);
     // Достаём информацию для отображения на странице
     const weatherFullInfo = {
         temp: locationInfo.main.temp,
@@ -24,6 +33,7 @@ async function submitHandler(event) {
         humidity: locationInfo.main.humidity,
         windSpeed: locationInfo.wind.speed,
         weatherCondition: locationInfo.weather[0].main,
+        time: time,
     };
 
     if (weatherFullInfo.cityName === "Novosibirsk") alert("ГОВНОСИБИРСК");
@@ -47,12 +57,14 @@ function renderWeatherData(data) {
     const humidityEl = main.querySelector("[data-humidity]");
     const windSpeedEl = main.querySelector("[data-wind-speed]");
     const weatherConditionImg = main.querySelector(".weather__img");
+    const timeEl = main.querySelector(".location__time");
 
     tempEl.textContent = `${Math.round(data.temp)}°C`;
     locationEl.textContent = `${data.cityName}, ${data.countryName}`;
     humidityEl.textContent = `${data.humidity}%`;
     const windSpeedRounded = Math.round(data.windSpeed * 10) / 10;
     windSpeedEl.textContent = `${windSpeedRounded} km/h`;
+    timeEl.textContent = data.time;
 
     console.log(data.weatherCondition);
     // img
@@ -65,4 +77,19 @@ function renderWeatherData(data) {
     };
 
     weatherConditionImg.src = `./img/weather/${fileNames[data.weatherCondition]}.png`;
+}
+
+function renderCurrentTime(info) {
+    const now = new Date(); // Текущее время
+
+    let userHours = now.getUTCHours() + info.timezone / 3600;
+
+    if (userHours >= 24) userHours -= 24;
+    if (userHours < 0) userHours += 24;
+    userHours = userHours < 10 ? `0${userHours}` : userHours;
+
+    let userMinutes = now.getUTCMinutes();
+    userMinutes = userMinutes < 10 ? `0${userMinutes}` : userMinutes;
+
+    return `${userHours}:${userMinutes}`;
 }
