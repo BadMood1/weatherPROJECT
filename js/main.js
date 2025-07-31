@@ -24,7 +24,8 @@ async function submitHandler(event) {
     const locationInfo = await getWeather(input.value.trim());
 
     const time = renderCurrentTime(locationInfo);
-    console.log(time);
+    const iconCode = locationInfo.weather[0].icon;
+    const imgUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
     // Достаём информацию для отображения на странице
     const weatherFullInfo = {
         temp: locationInfo.main.temp,
@@ -34,9 +35,8 @@ async function submitHandler(event) {
         windSpeed: locationInfo.wind.speed,
         weatherCondition: locationInfo.weather[0].main,
         time: time,
+        imgUrl: imgUrl,
     };
-
-    if (weatherFullInfo.cityName === "Novosibirsk") alert("ГОВНОСИБИРСК");
 
     renderWeatherData(weatherFullInfo);
 }
@@ -47,7 +47,7 @@ async function getWeather(cityName) {
     // Делаем запрос
     const response = await fetch(geoUrl);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
 }
 
@@ -66,17 +66,18 @@ function renderWeatherData(data) {
     windSpeedEl.textContent = `${windSpeedRounded} km/h`;
     timeEl.textContent = data.time;
 
-    console.log(data.weatherCondition);
     // img
 
-    const fileNames = {
+    /*const fileNames = {
         Clouds: "mist",
         Clear: "clear",
         Rain: "rain",
         Snow: "snow",
     };
 
-    weatherConditionImg.src = `./img/weather/${fileNames[data.weatherCondition]}.png`;
+    weatherConditionImg.src = `./img/weather/${fileNames[data.weatherCondition]}.png`;*/
+
+    weatherConditionImg.src = data.imgUrl; // Так проще, чем самому иконки мутить
 }
 
 function renderCurrentTime(info) {
